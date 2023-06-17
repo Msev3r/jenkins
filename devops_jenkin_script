@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    stages {
+        stage('Git-Checkout') {
+            steps {
+                echo "Getting it from GIT";
+                git 'https://github.com/simplilearn-github/Pipeline_Script.git'
+            }
+        }
+        stage('Compile') {
+            steps { echo "compiled successfully"
+                    bat 'Build.bat'
+            }
+        }
+        stage('Junit') {
+            steps { echo "Junit passed"
+                    bat 'Unit.bat'
+            }
+        }
+        stage('Quality-Gate') {
+            steps { echo "quality pass";
+                    bat 'Quality.bat'
+            
+            }
+        }
+        stage('Deploy') {
+            steps {echo "pass!"
+                    bat 'Deploy.bat'
+        }
+    }
+}
+post {
+    always {
+        echo 'THis will always run' 
+        }
+    success {
+        echo 'only if successfull'
+        }
+    failure {
+        echo 'only if failed'
+        }
+    unstable {
+        echo 'marked unstable'
+        }
+    changed {
+        echo 'if pipeline has changed'
+        }
+    }
+}
